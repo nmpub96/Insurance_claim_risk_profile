@@ -68,6 +68,9 @@ pantab.frame_to_hyper(
     "claims_data_final.hyper",
     table="risk_model"
 )
+
+```
+
  Dashboard Overview (Tableau)
 Executive KPIs
 Total Claims
