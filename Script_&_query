@@ -1,0 +1,70 @@
+import duckdb
+
+### Ommitting _c39 (Null) ####
+
+claims_data_final = duckdb.query("""
+WITH risk_flags AS (
+    SELECT
+        *,
+
+        -- Behavioral risk 
+        CASE 
+            WHEN witnesses = 0 AND total_claim_amount > 70000
+            THEN 1 ELSE 0 
+        END AS high_loss_no_witness,
+
+        CASE 
+            WHEN police_report_available = 'NO'
+                 AND incident_severity = 'Minor Damage'
+                 AND total_claim_amount > 50000
+            THEN 1 ELSE 0 
+        END AS fraud_pattern_flag,
+
+        CASE 
+            WHEN tenure_days < 30 
+            THEN 1 ELSE 0 
+        END AS early_claim_flag
+
+    FROM pandas_cleanseddf
+),
+
+aggregates AS (
+    SELECT
+        incident_state AS ag_state,
+        exposure_tiers AS ag_tiers,
+
+        COUNT(*) AS claims_count,
+        AVG(total_claim_amount) AS avg_claim,
+        AVG(is_fraud) AS fraud_rate
+
+    FROM risk_flags
+    GROUP BY incident_state, exposure_tiers
+),
+
+final AS (
+    SELECT
+        rf.*,
+
+        -- join back segment metrics
+        ag.claims_count,
+        ag.avg_claim,
+        ag.fraud_rate,
+
+        -- window functions
+        RANK() OVER (ORDER BY total_claim_amount DESC) AS claim_rank,
+
+        RANK() OVER (
+            PARTITION BY incident_state 
+            ORDER BY total_claim_amount DESC
+        ) AS state_rank
+
+    FROM risk_flags rf
+    LEFT JOIN aggregates ag
+        ON rf.incident_state = ag.ag_state
+        AND rf.exposure_tiers = ag.ag_tiers
+)
+
+SELECT * FROM final;
+""").to_df()
+
+claims_data_final.head()
