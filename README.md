@@ -94,7 +94,7 @@ Identifies regional risk clusters
 Key Insights Delivered
 A minority of claims drive a disproportionate share of losses
 Higher exposure tiers are associated with increased severity
-Behavioral flags strongly correlate with elevated fraud probability
+Behavioral flags strongly correlate with elevated fraud risk
 Risk distribution varies meaningfully by geographic region
 Business Impact
 This solution enables:
