@@ -1,7 +1,9 @@
 # Insurance Claims Risk Modeling Dashboard
-##  Project Overview
+## Project Overview
+---
 This project presents an end-to-end risk analytics pipeline for insurance claims, combining data engineering, feature development, and executive-level reporting. The objective is to provide leadership with a clear view of where risk is concentrated, how losses are distributed, and which behavioral patterns are associated with fraud and elevated claim severity.
 The dashboard integrates exposure segmentation, loss concentration analysis, and behavioral risk indicators into a unified framework, enabling more informed underwriting, pricing, and fraud mitigation decisions.
+
 ---
 ##  Key Business Questions
 This solution is designed to answer the following:
